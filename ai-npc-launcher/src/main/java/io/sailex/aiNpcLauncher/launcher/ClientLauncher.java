@@ -98,7 +98,8 @@ public class ClientLauncher {
 				return;
 			}
 			setMcDir();
-			this.files = launcher.getFileManager().createRelative(UUID.randomUUID().toString());
+			this.files =
+					launcher.getFileManager().createRelative(UUID.randomUUID().toString());
 		} catch (AuthException e) {
 			LogUtil.error("Failed to authenticate.");
 		} catch (CommandException e) {
@@ -196,8 +197,7 @@ public class ClientLauncher {
 		LogUtil.info(msaDeviceCode.getDirectVerificationUri(), true);
 		try {
 			URI url = URI.create(msaDeviceCode.getDirectVerificationUri());
-			if (Desktop.isDesktopSupported()
-					&& Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				Desktop.getDesktop().browse(url);
 			} else {
 				new ProcessBuilder("open", url.toString()).start();

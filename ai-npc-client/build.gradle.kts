@@ -1,23 +1,15 @@
 plugins {
     id("fabric-loom") version "1.8-SNAPSHOT"
-    id("maven-publish")
-    id("com.diffplug.spotless") version "7.0.0.BETA2"
-}
-
-version = project.extra["mod_version"] as String
-group = project.extra["maven_group"] as String
-
-base {
-    archivesName.set(project.extra["archives_base_name"] as String)
 }
 
 repositories {
-    mavenCentral()
     flatDir {
         dirs("libs")
     }
 }
 
+group = rootProject.extra["maven_group"] as String
+version = rootProject.extra["mod_version"] as String
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.extra["minecraft_version"]}")
@@ -26,6 +18,7 @@ dependencies {
     include(modImplementation("net.fabricmc.fabric-api:fabric-api:${project.extra["fabric_version"]}")!!)
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
+
     include(modImplementation("org.xerial:sqlite-jdbc:3.46.1.3")!!)
     include(modImplementation("cabaletta:baritone-api-fabric:1.10.2")!!)
     include(modRuntimeOnly("dev_babbaj:nether-pathfinder-1.4.1")!!)
@@ -55,9 +48,9 @@ tasks.processResources {
 
     filesMatching("fabric.mod.json") {
         expand(
-                "version" to project.version,
-                "minecraft_version" to project.extra["minecraft_version"],
-                "loader_version" to project.extra["loader_version"]
+            "version" to project.version,
+            "minecraft_version" to project.extra["minecraft_version"],
+            "loader_version" to project.extra["loader_version"]
         )
     }
 }
@@ -82,27 +75,6 @@ java {
 }
 
 val archivesBaseName: String by project
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            artifactId = archivesBaseName
-            from(components["java"])
-        }
-    }
-    repositories {
-    }
-}
-
-spotless {
-    java {
-        palantirJavaFormat()
-        indentWithTabs()
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-}
 
 tasks.jar {
     from("LICENSE") {

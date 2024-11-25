@@ -1,29 +1,21 @@
 plugins {
     id("fabric-loom") version "1.8-SNAPSHOT"
-    id("maven-publish")
-    id("com.diffplug.spotless") version "7.0.0.BETA2"
-}
-
-version = project.extra["mod_version"] as String
-group = project.extra["maven_group"] as String
-
-base {
-    archivesName.set(project.extra["archives_base_name"] as String)
 }
 
 repositories {
-    mavenCentral()
     flatDir {
         dirs("libs")
     }
 }
 
+group = rootProject.extra["maven_group"] as String
+version = rootProject.extra["mod_version"] as String
+
 dependencies {
     minecraft("com.mojang:minecraft:${project.extra["minecraft_version"]}")
     mappings("net.fabricmc:yarn:${project.extra["yarn_mappings"]}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.extra["loader_version"]}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.extra["fabric_version"]}")
-
+    include(modImplementation("net.fabricmc.fabric-api:fabric-api:${project.extra["fabric_version"]}")!!)
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
@@ -77,26 +69,5 @@ val archivesBaseName: String by project
 tasks.jar {
     from("LICENSE") {
         rename { "${it}_${archivesBaseName}" }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            artifactId = archivesBaseName
-            from(components["java"])
-        }
-    }
-    repositories {
-    }
-}
-
-spotless {
-    java {
-        palantirJavaFormat()
-        indentWithTabs()
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
     }
 }

@@ -1,0 +1,21 @@
+plugins {
+    id("com.diffplug.spotless") version "7.0.0.BETA2"
+}
+
+subprojects {
+    apply(plugin = "com.diffplug.spotless")
+
+    repositories {
+        mavenCentral()
+    }
+
+    spotless {
+        java {
+            palantirJavaFormat()
+            indentWithTabs()
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
+}
