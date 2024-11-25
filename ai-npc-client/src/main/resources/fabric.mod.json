@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-npc",
+  "version": "${version}",
+  "name": "AI-NPC",
+  "description": "A Minecraft NPC thats controlled by a LLM.",
+  "authors": ["sailex428"],
+  "contact": {},
+  "license": "LGPL-3.0",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.sailex.aiNpc.client.AiNPCClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
