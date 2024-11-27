@@ -2,20 +2,24 @@ plugins {
     id("fabric-loom") version "1.8-SNAPSHOT"
 }
 
+group = rootProject.extra["mod.group"] as String
+version = rootProject.extra["mod.version"] as String
+val mcVersion = "1.20.4"
+val fabricLoaderVersion = "0.15.11"
+val fabricApiVersion = "0.97.2+1.20.4"
+val yarnVersion = "1.20.4+build.3"
+
 repositories {
     flatDir {
         dirs("libs")
     }
 }
 
-group = rootProject.extra["maven_group"] as String
-version = rootProject.extra["mod_version"] as String
-
 dependencies {
-    minecraft("com.mojang:minecraft:${project.extra["minecraft_version"]}")
-    mappings("net.fabricmc:yarn:${project.extra["yarn_mappings"]}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.extra["loader_version"]}")
-    include(modImplementation("net.fabricmc.fabric-api:fabric-api:${project.extra["fabric_version"]}")!!)
+    minecraft("com.mojang:minecraft:$mcVersion")
+    mappings("net.fabricmc:yarn:$yarnVersion:v2")
+    modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
+    include(modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")!!)
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
@@ -31,16 +35,16 @@ tasks.register<Jar>("repackageHeadlessmc") {
 }
 
 tasks.processResources {
-    inputs.property("version", project.version)
-    inputs.property("minecraft_version", project.extra["minecraft_version"])
-    inputs.property("loader_version", project.extra["loader_version"])
+    inputs.property("version", version)
+    inputs.property("mcDep", mcVersion)
+    inputs.property("loader_version", fabricLoaderVersion)
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand(
-            "version" to project.version,
-            "minecraft_version" to project.extra["minecraft_version"],
-            "loader_version" to project.extra["loader_version"]
+            "version" to version,
+            "mcDep" to mcVersion,
+            "loader_version" to fabricLoaderVersion
         )
     }
 }

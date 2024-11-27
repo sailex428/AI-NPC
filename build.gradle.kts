@@ -5,10 +5,6 @@ plugins {
 subprojects {
     apply(plugin = "com.diffplug.spotless")
 
-    repositories {
-        mavenCentral()
-    }
-
     spotless {
         java {
             palantirJavaFormat()
