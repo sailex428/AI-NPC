@@ -4,28 +4,28 @@ plugins {
 
 group = rootProject.extra["mod.group"] as String
 version = rootProject.extra["mod.version"] as String
-val mcVersion = "1.20.4"
-val fabricLoaderVersion = "0.15.11"
-val fabricApiVersion = "0.97.2+1.20.4"
-val yarnVersion = "1.20.4+build.3"
+
+var mcVersion = property("mc.version").toString()
+var fabricLoaderVersion = property("deps.fabric_loader").toString()
 
 repositories {
     flatDir {
         dirs("libs")
+        dirs("../../libs")
     }
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings("net.fabricmc:yarn:$yarnVersion:v2")
+    mappings("net.fabricmc:yarn:$mcVersion+build.${property("deps.yarn_build")}:v2")
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
-    include(modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")!!)
-    compileOnly("org.projectlombok:lombok:1.18.34")
+    include(modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}+$mcVersion")!!)
+
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     include(modImplementation("org.xerial:sqlite-jdbc:3.46.1.3")!!)
-    include(modImplementation("cabaletta:baritone-api-fabric:1.10.2")!!)
+    include(modImplementation("cabaletta:baritone-api-fabric:${property("deps.baritone")}")!!)
     include(modRuntimeOnly("dev_babbaj:nether-pathfinder-1.4.1")!!)
 
     include(modImplementation("io.github.ollama4j:ollama4j:1.0.89")!!)
@@ -45,6 +45,17 @@ dependencies {
     })
 }
 
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        create("ai-npc-client") {
+            sourceSet(sourceSets["main"])
+            sourceSet(sourceSets["client"])
+        }
+    }
+}
+
 tasks.processResources {
     inputs.property("version", version)
     inputs.property("mcDep", mcVersion)
@@ -60,29 +71,16 @@ tasks.processResources {
     }
 }
 
-val targetJavaVersion = 17
-
-tasks {
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-            options.release.set(targetJavaVersion)
-        }
-    }
-}
-
 java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
-    }
     withSourcesJar()
+    val java = if (stonecutter.eval(mcVersion, ">=1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    targetCompatibility = java
+    sourceCompatibility = java
 }
 
-val archivesBaseName: String by project
-
-tasks.jar {
-    from("LICENSE") {
-        rename { "${it}_${archivesBaseName}" }
-    }
+tasks.register<Copy>("buildAndCollect") {
+    group = "build"
+    from(tasks.remapJar.get().archiveFile)
+    into(rootProject.layout.buildDirectory.file("libs/${property("mod.version")}"))
+    dependsOn("build")
 }

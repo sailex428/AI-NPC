@@ -15,10 +15,12 @@ stonecutter {
     centralScript = "build.gradle.kts"
     kotlinController = true
 
-    create(rootProject) {
-        versions("1.20.4", "1.21")
+    shared {
+        versions("1.20.4", "1.21.3")
         vcsVersion = "1.20.4"
     }
+    create(project = ("ai-npc-client"))
+    create(project = ("ai-npc-launcher"))
 }
 
 rootProject.name = "ai-npc"
