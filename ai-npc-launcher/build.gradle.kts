@@ -26,17 +26,6 @@ dependencies {
     include(modImplementation("me.earth.headlessmc:headlessmc-launcher-repackaged:2.3.0")!!)
 }
 
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        create("ai-npc-launcher") {
-            sourceSet(sourceSets["main"])
-            sourceSet(sourceSets["client"])
-        }
-    }
-}
-
 tasks.processResources {
     inputs.property("version", version)
     inputs.property("mcDep", mcVersion)

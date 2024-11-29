@@ -45,17 +45,6 @@ dependencies {
     })
 }
 
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        create("ai-npc-client") {
-            sourceSet(sourceSets["main"])
-            sourceSet(sourceSets["client"])
-        }
-    }
-}
-
 tasks.processResources {
     inputs.property("version", version)
     inputs.property("mcDep", mcVersion)
