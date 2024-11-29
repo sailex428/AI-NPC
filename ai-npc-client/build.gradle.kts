@@ -81,6 +81,6 @@ java {
 tasks.register<Copy>("buildAndCollect") {
     group = "build"
     from(tasks.remapJar.get().archiveFile)
-    into(rootProject.layout.buildDirectory.file("libs/${property("mod.version")}"))
+    into(rootProject.layout.buildDirectory.file("libs/$version"))
     dependsOn("build")
 }
