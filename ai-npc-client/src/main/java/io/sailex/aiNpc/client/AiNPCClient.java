@@ -67,7 +67,9 @@ public class AiNPCClient implements ClientModInitializer {
 				client,
 				new ServerAddress(serverName, Integer.parseInt(port)),
 				new ServerInfo("server", serverName, ServerInfo.ServerType.OTHER),
-				false);
+				false
+				/*? if >=1.21.3 {*//*, null*//*?}*/
+		);
 	}
 
 	private void initializeNpc() {
