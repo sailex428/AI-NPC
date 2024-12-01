@@ -68,7 +68,7 @@ public class AiNPCClient implements ClientModInitializer {
 				new ServerAddress(serverName, Integer.parseInt(port)),
 				new ServerInfo("server", serverName, ServerInfo.ServerType.OTHER),
 				false
-				/*? if >=1.21.3 {*//*, null*//*?}*/
+				/*? if >=1.21.1 {*//*, null*//*?}*/
 		);
 	}
 

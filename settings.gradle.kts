@@ -19,7 +19,7 @@ stonecutter {
     centralScript = "build.gradle.kts"
 
     create(projects = listOf("ai-npc-client", "ai-npc-launcher")) {
-        versions("1.20.4", "1.21.3")
+        versions("1.20.4", "1.21.1", "1.21.3")
         vcsVersion = "1.20.4"
     }
 }
