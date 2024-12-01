@@ -2,8 +2,11 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven("https://maven.fabricmc.net/")
+        maven {
+            name = "Fabric"
+            url = uri("https://maven.fabricmc.net/")
         maven("https://maven.kikugie.dev/snapshots")
+        }
     }
 }
 
@@ -12,15 +15,13 @@ plugins {
 }
 
 stonecutter {
-    centralScript = "build.gradle.kts"
     kotlinController = true
+    centralScript = "build.gradle.kts"
 
-    shared {
+    create(projects = listOf("ai-npc-client", "ai-npc-launcher")) {
         versions("1.20.4", "1.21.3")
         vcsVersion = "1.20.4"
     }
-    create(project = ("ai-npc-client"))
-    create(project = ("ai-npc-launcher"))
 }
 
 rootProject.name = "ai-npc"

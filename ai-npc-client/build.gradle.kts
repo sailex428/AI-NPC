@@ -9,6 +9,8 @@ var mcVersion = property("mc.version").toString()
 var fabricLoaderVersion = property("deps.fabric_loader").toString()
 
 repositories {
+    mavenCentral()
+    maven("https://maven.fabricmc.net/")
     flatDir {
         dirs("libs")
         dirs("../../libs")
