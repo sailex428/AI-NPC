@@ -9,8 +9,6 @@ var mcVersion = property("mc.version").toString()
 var fabricLoaderVersion = property("deps.fabric_loader").toString()
 
 repositories {
-    mavenCentral()
-    maven("https://maven.fabricmc.net/")
     flatDir {
         dirs("../../libs")
     }
@@ -28,6 +26,13 @@ dependencies {
     include(modImplementation("me.earth.headlessmc:headlessmc-launcher-repackaged:2.3.0")!!)
 }
 
+java {
+    withSourcesJar()
+    val java = if (stonecutter.eval(mcVersion, ">=1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    targetCompatibility = java
+    sourceCompatibility = java
+}
+
 tasks.processResources {
     inputs.property("version", version)
     inputs.property("mcDep", mcVersion)
@@ -41,13 +46,6 @@ tasks.processResources {
             "loader_version" to fabricLoaderVersion
         )
     }
-}
-
-java {
-    withSourcesJar()
-    val java = if (stonecutter.eval(mcVersion, ">=1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
-    targetCompatibility = java
-    sourceCompatibility = java
 }
 
 tasks.register<Copy>("buildAndCollect") {

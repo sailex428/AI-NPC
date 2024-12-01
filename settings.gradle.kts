@@ -2,10 +2,10 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.kikugie.dev/snapshots")
         maven {
             name = "Fabric"
             url = uri("https://maven.fabricmc.net/")
-        maven("https://maven.kikugie.dev/snapshots")
         }
     }
 }
@@ -25,4 +25,3 @@ stonecutter {
 }
 
 rootProject.name = "ai-npc"
-include("ai-npc-client", "ai-npc-launcher")
