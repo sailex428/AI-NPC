@@ -64,7 +64,7 @@ tasks.register<Copy>("buildAndCollect") {
 
 tasks.register<Jar>("repackageHeadlessmc") {
     group = "project"
-    from(zipTree("libs/headlessmc-launcher-2.3.0.jar")) {
+    from(zipTree("../../libs/headlessmc-launcher-2.3.0.jar")) {
         exclude("org/objectweb/asm/**")
     }
     destinationDirectory.set(file("libs"))
