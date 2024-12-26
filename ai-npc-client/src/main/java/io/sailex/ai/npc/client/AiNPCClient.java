@@ -75,7 +75,7 @@ public class AiNPCClient implements ClientModInitializer {
 				npcInitialized = true;
 
 				// recipes are only after world init loaded
-				// ? if <1.21.2
+				//? if <1.21.2
 				defaultResourcesIndexer.indexRecipes();
 				defaultResourcesIndexer.shutdownExecutor();
 			}
@@ -111,7 +111,8 @@ public class AiNPCClient implements ClientModInitializer {
 			String apiKey = Config.getProperty(ConfigConstants.NPC_LLM_OPENAI_API_KEY);
 			String openAiModel = Config.getProperty(ConfigConstants.NPC_LLM_OPENAI_MODEL);
 			String baseUrl = Config.getProperty(ConfigConstants.NPC_LLM_OPENAI_BASE_URL);
-			llmService = new OpenAiClient(openAiModel, apiKey, baseUrl);
+			String embeddingModel = Config.getProperty(ConfigConstants.NPC_LLM_OPENAI_EMBEDDING_MODEL);
+			llmService = new OpenAiClient(openAiModel, apiKey, baseUrl, embeddingModel);
 		} else {
 			throw new IllegalArgumentException("Invalid LLM type: " + npcType);
 		}

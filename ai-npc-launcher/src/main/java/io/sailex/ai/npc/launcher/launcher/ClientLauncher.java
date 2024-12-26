@@ -6,9 +6,7 @@ import io.sailex.ai.npc.launcher.constants.ModRepositories;
 import io.sailex.ai.npc.launcher.util.LogUtil;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
 import me.earth.headlessmc.api.command.CommandException;
@@ -173,9 +171,9 @@ public class ClientLauncher {
 	}
 
 	private Version getVersion(String versionName) {
-		for (Version version : launcher.getVersionService().getContents()) {
-			if (version.getName().contains(versionName) && version.getName().contains("fabric")) {
-				return version;
+		for (Version fabricVersion : launcher.getVersionService().getContents()) {
+			if (fabricVersion.getName().contains(versionName) && fabricVersion.getName().contains("fabric")) {
+				return fabricVersion;
 			}
 		}
 		return null;
@@ -227,11 +225,14 @@ public class ClientLauncher {
 			String apiKey = ModConfig.getProperty(ConfigConstants.NPC_LLM_OPENAI_API_KEY);
 			if (apiKey == null || apiKey.isEmpty()) {
 				LogUtil.error("OpenAI API key is missing.");
-				return null;
+				return Collections.emptyList();
 			}
 			jvmArgs.addAll(List.of(
 					buildJvmArg(ConfigConstants.NPC_LLM_OPENAI_MODEL, llmModel),
 					buildJvmArg(ConfigConstants.NPC_LLM_OPENAI_API_KEY, apiKey),
+					buildJvmArg(
+							ConfigConstants.NPC_LLM_OPENAI_EMBEDDING_MODEL,
+							ModConfig.getProperty(ConfigConstants.NPC_LLM_OPENAI_EMBEDDING_MODEL)),
 					buildJvmArg(
 							ConfigConstants.NPC_LLM_OPENAI_BASE_URL,
 							ModConfig.getProperty(ConfigConstants.NPC_LLM_OPENAI_BASE_URL))));

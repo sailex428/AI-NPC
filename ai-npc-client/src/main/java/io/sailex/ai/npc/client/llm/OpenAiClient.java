@@ -20,6 +20,7 @@ public class OpenAiClient extends ALLMClient implements ILLMClient {
 	private SimpleOpenAI openAiService;
 
 	private final String openAiModel;
+	private final String embeddingModel;
 
 	/**
 	 * Constructor for OpenAiClient.
@@ -27,9 +28,10 @@ public class OpenAiClient extends ALLMClient implements ILLMClient {
 	 * @param openAiModel the openai model (e.g. "gpt-3.5-turbo")
 	 * @param apiKey      the api key
 	 */
-	public OpenAiClient(String openAiModel, String apiKey, String baseUrl) {
+	public OpenAiClient(String openAiModel, String apiKey, String baseUrl, String embeddingModel) {
 		super();
 		this.openAiModel = openAiModel;
+		this.embeddingModel = embeddingModel;
 		this.openAiService =
 				SimpleOpenAI.builder().apiKey(apiKey).baseUrl(baseUrl).build();
 	}
@@ -55,7 +57,7 @@ public class OpenAiClient extends ALLMClient implements ILLMClient {
 					.build();
 
 			String chatResponse =
-					openAiService.chatCompletions().create(chatRequest).join().firstContent();
+ 					openAiService.chatCompletions().create(chatRequest).join().firstContent();
 
 			LOGGER.info("Generated response from openai: {}", chatResponse);
 			if (!chatResponse.isBlank()) {
@@ -74,9 +76,12 @@ public class OpenAiClient extends ALLMClient implements ILLMClient {
 			return convertEmbedding(openAiService
 					.embeddings()
 					.create(EmbeddingRequest.builder()
-							.model("text-embedding-3-small")
+							.model(embeddingModel)
 							.input(prompt)
-							.build())
+							.build()).exceptionally(e -> {
+						LOGGER.error("Internal error: {}", prompt, e);
+						return null;
+					})
 					.join()
 					.getData()
 					.stream()

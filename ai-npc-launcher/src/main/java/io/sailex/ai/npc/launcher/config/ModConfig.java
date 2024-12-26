@@ -46,6 +46,7 @@ public class ModConfig {
 		properties.setProperty(ConfigConstants.NPC_IS_HEADLESS, "true");
 		properties.setProperty(ConfigConstants.NPC_SERVER_PORT, "25565");
 		properties.setProperty(ConfigConstants.NPC_LLM_OPENAI_BASE_URL, "https://api.openai.com");
+		properties.setProperty(ConfigConstants.NPC_LLM_OPENAI_EMBEDDING_MODEL, "text-embedding-3-small");
 	}
 
 	public static boolean saveProperties() {
