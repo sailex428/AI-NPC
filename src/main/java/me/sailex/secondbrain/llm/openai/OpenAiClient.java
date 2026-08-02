@@ -23,8 +23,12 @@ public class OpenAiClient implements LLMClient {
 	 * @param apiKey  the api key
 	 */
 	public OpenAiClient(String model, String apiKey, int timeout) {
+		// Default to the standard openai endpoint, but allow override
+		String envBaseUrl = System.getenv("OPENAI_BASE_URL");
+		String baseUrl = (envValue != null) ? envValue : "https://api.openai.com/v1";
+
 		this.openAiModel = model;
-		this.openAiService = SimpleOpenAI.builder().apiKey(apiKey).build();
+		this.openAiService = SimpleOpenAI.builder().baseUrl(baseUrl).apiKey(apiKey).build();
 		this.timeout = timeout;
 	}
 
